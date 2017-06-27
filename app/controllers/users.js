@@ -26,17 +26,17 @@ const getToken = () =>
     )
   )
 
-const index = (req, res, next) => {
-  User.find({})
-    .then(users => res.json({ users }))
-    .catch(next)
-}
-
-const show = (req, res, next) => {
-  User.findById(req.params.id)
-    .then(user => user ? res.json({ user }) : next())
-    .catch(next)
-}
+// const index = (req, res, next) => {
+//   User.find({})
+//     .then(users => res.json({ users }))
+//     .catch(next)
+// }
+//
+// const show = (req, res, next) => {
+//   User.findById(req.params.id)
+//     .then(user => user ? res.json({ user }) : next())
+//     .catch(next)
+// }
 
 const makeErrorHandler = (res, next) =>
   error =>
@@ -109,8 +109,8 @@ const changepw = (req, res, next) => {
 }
 
 module.exports = controller({
-  index,
-  show,
+  // index,
+  // show,
   signup,
   signin,
   signout,
