@@ -80,6 +80,7 @@ const signin = (req, res, next) => {
 }
 
 const signout = (req, res, next) => {
+  debugger
   getToken().then(token =>
     User.findOneAndUpdate({
       _id: req.params.id,
