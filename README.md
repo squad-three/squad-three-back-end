@@ -1,282 +1,105 @@
-[![General Assembly Logo](https://camo.githubusercontent.com/1a91b05b8f4d44b5bbfb83abac2b0996d8e26c92/687474703a2f2f692e696d6775722e636f6d2f6b6538555354712e706e67)](https://generalassemb.ly/education/web-development-immersive)
+## Bucket List
 
-# express-api-template
+Bucket list is a single-page application that allows users to track goals they would
+like to achieve and experiences they would like to have in their lifetime.
 
-A template for starting projects with `express` as an API. Includes
-authentication and common middlewares.
+## Technologies Used
 
-At the beginning of each cohort, update the versions in
-[`package.json`](package.json) by replace all versions with a glob (`*`) and
-running `npm update --save && npm update --save-dev`. You may wish to test these
-changes by deleting the `node_modules` directory and running `npm install`.
-Fix any conflicts.
+Bucket List is basically a MEAN (Mongo, Express, Angular, NodeJS) without the 'A' -- Angular.
 
-This template follows Rails-like conventions for organizing controller and
-model code, and has a routing layer which is similar to the Rails routing DSL.
+The backend database is MongoDB, and the API server is a Node/Express application
+that enables CRUD and authorization functions.
 
-## Dependencies
+In addition to that stack, we used the [DataTables jQuery plugin](http://datatables.net).
 
-Install with `npm install`.
+The backend server is hosted on Heroku, and the front end is hosted on Github Pages.
+See below for links to deployed front and back end servers as well as
+links to front and back end repositories.
 
--   [`express`](http://expressjs.com/)
--   [`mongoose`](http://mongoosejs.com/)
+## Approach
 
-At the beginning of each cohort, update the versions in
-[`package.json`](package.json) by replace all versions with a glob (`*`) and
-running `npm update --save && npm update --save-dev`. You may wish to test these
-changes by deleting the `node_modules` directory and running `npm install`.
-Fix any conflicts.
+### Approach to implementing CRUD and UI functions for bucket list items
 
-## Installation
+We used the DataTables, a jQuery plugin that helps developers display and update
+table data. We chose it because it is widely used enough to be stable and well-supported,
+and it built-in extra features we would not have had time to implement, such as search
+and sort.
 
-1.  [Download](../../archive/master.zip) this template.
-1.  Unzip and rename the template directory.
-1.  Empty [`README.md`](README.md) and fill with your own content.
-1.  Move into the new project and `git init`.
-1.  Replace all instances of `'express-api-template'` with your app name. This
-    includes `package.json`, various debugger configurations, and the MongoDB
-    store.
-1.  Install dependencies with `npm install`.
-1.  Set a SECRET_KEY in the environment.
-1.  Run the API server with `npm start`. If you want your code to be reloaded on
-    change, you should `npm install -g nodemon` and use `nodemon` instead of
-    `npm start`.
-1.  Once everything is working, make an initial commit.
+DataTables also has its own API. Because of this, we did not have a completely
+traditional approach to building a model/route/controller set to handle crud functions.
+For some of these functions, we were using the DataTables API to both get and set
+data a user sees when they log in.
 
-For development and testing, set the SECRET_KEY from the root of your
- repository using
+We briefly considered having DataTables emit all of a user's bucket list items for
+each request and storing it as one big blob in Mongo, but ultimately we took a row-by-row
+approach where each bucket list item has an individual database record.
 
-```sh
-echo SECRET_KEY=$(/usr/local/opt/openssl/bin/openssl rand -base64 66 | tr -d '\n') >>.env
+### Development/Team Approach
+
+We held daily standups in the morning to coordinate and divide tasks. To cut down
+on the chances of merge conflicts, we created long issue queues for the front and back
+end repositories. Each new feature branch was named after its issue, for example: issue#11.
+Referencing the issue in our commits and pull requests gave us a clear sense of which
+commits applied to which desired features and bugfixes. As an example,
+look at the following issue, a [bugfix for the UI](https://github.com/squad-three/squad-three-front-end/issues/51)
+The issue clearly shows commits in progress towards solving the problem and
+documents the merge of the feature branch into development.
+
+We used Slack extensively to communicate in the evenings when we weren't physically together.
+We might have been Slacking each other at 1AM a few times, but no team members will
+confirm or deny this.
+
+## Challenges
+
+Libraries giveth, and libraries take away. While DataTables significantly sped up the
+creation of our UI, we spent too much time struggling with an add-on to the library
+which would have allowed in-row editing of bucket list items.
+
+Once we abandoned that approach, we took a more traditional approach, popping up a form
+to allow users to create and edit bucket list items.
+
+## Instructions for installing dependencies:
+
+Clone this repository and run `npm install`.
+Install DataTables and its default styles at the command line:
+
+```
+npm install datatables.net    # Core library
+npm install datatables.net-dt # Styling
+
 ```
 
-In order to make requests from your deployed client application, you will need
-to set `CLIENT_ORIGIN` in the environment (e.g. `heroku config:set
-CLIENT_ORIGIN=https://<github-username>.github.io`).
+## Bucket List Documentation: Bucket List Wiki
 
-## Structure
+We have [an extensive wiki](https://github.com/squad-three/squad-three-back-end) documenting our approach to authorization, our API, checklists, and more. We would like to call out the following specific
+planning documents and documentation:
 
-Dependencies are stored in [`package.json`](package.json).
+## API Documentation
 
-Do not configure `grunt` packages directly in the
-[`Gruntfile.js`](Gruntfile.js). Instead, store configurations in the
-[`grunt`](grunt) directory. You won't need a top-level key, since that's
-generated by the `Gruntfile.js` based on the filename of the configuration
-object stored in the `grunt` directory.
+[Link to API Documentation](https://github.com/squad-three/squad-three-back-end/wiki/api-intro)
 
-Developers should store JavaScript files in [`app/controllers`](app/controllers)
- and [`app/models`](app/models).
-Routes are stored in [`config/routes.js`](config/routes.js)
+## User Stories
 
-## Tasks
+[Link to User Stories](https://github.com/squad-three/squad-three-back-end/wiki/User-Stories)
 
-Developers should run these often!
+## Entity Relationship Diagram
 
--   `grunt nag` or just `grunt`: runs code quality analysis tools on your code
-    and complains
--   `grunt reformat`: reformats all your code in a standard style
--   `grunt test`: runs any automated tests
+[Link to Entity Relationship Diagram (ERD)](https://github.com/squad-three/squad-three-back-end/wiki/ERD)
 
-## API
+## Wireframes
 
-Use this as the basis for your own API documentation. Add a new third-level
-heading for your custom entities, and follow the pattern provided for the
-built-in user authentication documentation.
+[Link to our wireframes](https://github.com/squad-three/squad-three-back-end/wiki/Wireframes)
 
-Scripts are included in [`scripts`](scripts) to test built-in actions. Add your
-own scripts to test your custom API.
+## Links to Deployed Front and Back End
 
-### Authentication
+[A link to the deployed front-end app](https://squad-three.github.io/squad-three-front-end/)
+[A link to the repo for your back-end](https://enigmatic-beyond-36967.herokuapp.com/)
 
-| Verb   | URI Pattern            | Controller#Action |
-|--------|------------------------|-------------------|
-| POST   | `/sign-up`             | `users#signup`    |
-| POST   | `/sign-in`             | `users#signin`    |
-| PATCH  | `/change-password/:id` | `users#changepw`  |
-| DELETE | `/sign-out/:id`        | `users#signout`   |
+## Links to Front And Back End Repositories
 
-#### POST /sign-up
+[A link to the front end repository](https://github.com/squad-three/squad-three-front-end)
+[A link to the back end repository](https://github.com/squad-three/squad-three-back-end)
 
-Request:
+## Team
 
-```sh
-curl --include --request POST http://localhost:4741/sign-up \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password",
-      "password_confirmation": "an example password"
-    }
-  }'
-```
-
-```sh
-scripts/sign-up.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 201 Created
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email"
-  }
-}
-```
-
-#### POST /sign-in
-
-Request:
-
-```sh
-curl --include --request POST http://localhost:4741/sign-in \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password"
-    }
-  }'
-```
-
-```sh
-scripts/sign-in.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email",
-    "token": "33ad6372f795694b333ec5f329ebeaaa"
-  }
-}
-```
-
-#### PATCH /change-password/:id
-
-Request:
-
-```sh
-curl --include --request PATCH http://localhost:4741/change-password/$ID \
-  --header "Authorization: Token token=$TOKEN" \
-  --header "Content-Type: application/json" \
-  --data '{
-    "passwords": {
-      "old": "an example password",
-      "new": "super sekrit"
-    }
-  }'
-```
-
-```sh
-ID=1 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/change-password.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-#### DELETE /sign-out/:id
-
-Request:
-
-```sh
-curl --include --request DELETE http://localhost:4741/sign-out/$ID \
-  --header "Authorization: Token token=$TOKEN"
-```
-
-```sh
-ID=1 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-### Users
-
-| Verb | URI Pattern | Controller#Action |
-|------|-------------|-------------------|
-| GET  | `/users`    | `users#index`     |
-| GET  | `/users/1`  | `users#show`      |
-
-#### GET /users
-
-Request:
-
-```sh
-curl --include --request GET http://localhost:4741/users \
-  --header "Authorization: Token token=$TOKEN"
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/users.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "users": [
-    {
-      "id": 2,
-      "email": "another@example.email"
-    },
-    {
-      "id": 1,
-      "email": "an@example.email"
-    }
-  ]
-}
-```
-
-#### GET /users/:id
-
-Request:
-
-```sh
-curl --include --request GET http://localhost:4741/users/$ID \
-  --header "Authorization: Token token=$TOKEN"
-```
-
-```sh
-ID=2 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/user.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 2,
-    "email": "another@example.email"
-  }
-}
-```
-
-## [License](LICENSE)
-
-1.  All content is licensed under a CC­BY­NC­SA 4.0 license.
-1.  All software code is licensed under GNU GPLv3. For commercial use or
-    alternative licensing, please contact legal@ga.co.
+Bucket List was built by Alex Constantine, Eric Scace, and Lisa Williams as a team project undertaken during WDI18 at General Assembly Boston.
