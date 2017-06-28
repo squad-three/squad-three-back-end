@@ -27,19 +27,15 @@ const show = (req, res) => {
 }
 
 const create = (req, res, next) => {
-  // const Bucket = Object.assign(req.body.data, {
-  //   _owner: req.user._id
-  // })
-  // Bucket.create(Bucket)
-  //   .then(Bucket =>
-  //     res.status(201)
-  //       .json({
-  //         Bucket: Bucket.toJSON({ virtuals: true, user: req.user })
-  //       }))
-    // .catch(next)
-  req.body.data[0].DT_RowId = '42'
+  // Math.random returns a random float between 0 & 1
+  req.body.data[0].DT_RowId = Math.trunc(Math.random() * 1000000.0).toString()
+  const bucketRow = Object.assign(req.body.data[0], {
+    _owner: req.user._id
+  })
+  Bucket.create(bucketRow)
+    .then(bucketRow => res.status(201).json(req.body))
+    .catch(next)
   console.log('Create: returning ', req.body.data)
-  res.status(201).json(req.body)
 }
 
 const update = (req, res, next) => {
