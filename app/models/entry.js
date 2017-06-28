@@ -2,8 +2,28 @@
 
 const mongoose = require('mongoose')
 
-const exampleSchema = new mongoose.Schema({
-  text: {
+const entrySchema = new mongoose.Schema({
+  description: {
+    type: String,
+    required: true
+  },
+  category: {
+    type: String,
+    required: true
+  },
+  location: {
+    type: String,
+    required: false
+  },
+  duration: {
+    type: String,
+    required: false
+  },
+  cost: {
+    type: Number,
+    required: false
+  },
+  status: {
     type: String,
     required: true
   },
@@ -15,7 +35,6 @@ const exampleSchema = new mongoose.Schema({
 }, {
   timestamps: true,
   toJSON: {
-    virtuals: true,
     transform: function (doc, ret, options) {
       const userId = (options.user && options.user._id) || false
       ret.editable = userId && userId.equals(doc._owner)
@@ -24,10 +43,6 @@ const exampleSchema = new mongoose.Schema({
   }
 })
 
-exampleSchema.virtual('length').get(function length () {
-  return this.text.length
-})
+const Entry = mongoose.model('Entry', entrySchema)
 
-const Example = mongoose.model('Example', exampleSchema)
-
-module.exports = Example
+module.exports = Entry
