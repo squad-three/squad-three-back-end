@@ -9,12 +9,15 @@ const setUser = require('./concerns/set-current-user')
 const setModel = require('./concerns/set-mongoose-model')
 
 const index = (req, res, next) => {
-  Bucket.find()
-    .then(Buckets => res.json({
-      Buckets: Buckets.map((e) =>
-        e.toJSON({ virtuals: true, user: req.user }))
-    }))
-    .catch(next)
+  // Bucket.find()
+  //   .then(Buckets => res.json({
+  //     Buckets: Buckets.map((e) =>
+  //       e.toJSON({ virtuals: true, user: req.user }))
+  //   }))
+  //   .catch(next)
+  req.body.data = []
+  console.log('Index: ', req.body)
+  res.status(201).json(req.body)
 }
 
 const show = (req, res) => {
@@ -34,6 +37,8 @@ const create = (req, res, next) => {
   //         Bucket: Bucket.toJSON({ virtuals: true, user: req.user })
   //       }))
     // .catch(next)
+  req.body.data[0].DT_RowId = '42'
+  console.log(req.body.data)
   res.status(201).json(req.body)
 }
 
@@ -45,10 +50,15 @@ const update = (req, res, next) => {
 }
 
 const destroy = (req, res, next) => {
-  debugger
-  req.Bucket.remove()
-    .then(() => res.sendStatus(204))
-    .catch(next)
+  // req contains
+  // req.params: { id: '42' },
+  // req.query: { action: 'remove', data: { '42': [Object] } },
+  console.log('Destroy: req.params = ', req.params)
+  console.log('Destory: req.query = ', req.quer)
+  res.sendStatus(204)
+  // req.Bucket.remove()
+  //   .then(() => res.sendStatus(204))
+    // .catch(next)
 }
 
 module.exports = controller({
@@ -60,6 +70,6 @@ module.exports = controller({
 }, { before: [
  { method: setUser, only: ['index', 'show'] },
  { method: authenticate, except: ['index', 'show'] },
- { method: setModel(Bucket), only: ['show'] },
- { method: setModel(Bucket, { forUser: true }), only: ['update', 'destroy'] }
+ { method: setModel(Bucket), only: ['show'] }
+// { method: setModel(Bucket, { forUser: true }), only: ['update', 'destroy'] }
 ] })
