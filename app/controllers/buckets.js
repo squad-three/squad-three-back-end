@@ -38,15 +38,17 @@ const create = (req, res, next) => {
   //       }))
     // .catch(next)
   req.body.data[0].DT_RowId = '42'
-  console.log(req.body.data)
+  console.log('Create: returning ', req.body.data)
   res.status(201).json(req.body)
 }
 
 const update = (req, res, next) => {
-  delete req.body._owner  // disallow owner reassignment.
-  req.Bucket.update(req.body.Bucket)
-    .then(() => res.sendStatus(204))
-    .catch(next)
+  // delete req.body._owner  // disallow owner reassignment.
+  // req.Bucket.update(req.body.Bucket)
+  //   .then(() => res.sendStatus(204))
+  //   .catch(next)
+  console.log('Update: received & returning: ', req.body.data)
+  res.status(201).json(req.body)
 }
 
 const destroy = (req, res, next) => {
