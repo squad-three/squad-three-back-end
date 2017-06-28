@@ -27,16 +27,17 @@ const show = (req, res) => {
 
 const create = (req, res, next) => {
   debugger
-  const Bucket = Object.assign(req.body.Bucket, {
-    _owner: req.user._id
-  })
-  Bucket.create(Bucket)
-    .then(Bucket =>
-      res.status(201)
-        .json({
-          Bucket: Bucket.toJSON({ virtuals: true, user: req.user })
-        }))
-    .catch(next)
+  // const Bucket = Object.assign(req.body.data, {
+  //   _owner: req.user._id
+  // })
+  // Bucket.create(Bucket)
+  //   .then(Bucket =>
+  //     res.status(201)
+  //       .json({
+  //         Bucket: Bucket.toJSON({ virtuals: true, user: req.user })
+  //       }))
+    // .catch(next)
+  res.status(201).json(req.body)
 }
 
 const update = (req, res, next) => {

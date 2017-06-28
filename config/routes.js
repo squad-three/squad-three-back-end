@@ -17,3 +17,4 @@ module.exports = require('lib/wiring/routes')
 .patch('/change-password/:id', 'users#changepw')
 
 .get('/bucket', 'buckets#index')
+.post('/bucket', 'buckets#create')
