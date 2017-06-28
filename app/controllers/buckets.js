@@ -9,7 +9,6 @@ const setUser = require('./concerns/set-current-user')
 const setModel = require('./concerns/set-mongoose-model')
 
 const index = (req, res, next) => {
-  debugger
   Bucket.find()
     .then(Buckets => res.json({
       Buckets: Buckets.map((e) =>
@@ -19,14 +18,12 @@ const index = (req, res, next) => {
 }
 
 const show = (req, res) => {
-  debugger
   res.json({
     Bucket: req.Bucket.toJSON({ virtuals: true, user: req.user })
   })
 }
 
 const create = (req, res, next) => {
-  debugger
   // const Bucket = Object.assign(req.body.data, {
   //   _owner: req.user._id
   // })
@@ -41,7 +38,6 @@ const create = (req, res, next) => {
 }
 
 const update = (req, res, next) => {
-  debugger
   delete req.body._owner  // disallow owner reassignment.
   req.Bucket.update(req.body.Bucket)
     .then(() => res.sendStatus(204))
