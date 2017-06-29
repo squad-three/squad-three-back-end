@@ -31,7 +31,7 @@ const index = (req, res, next) => {
 
 const create = (req, res, next) => {
   // Math.random returns a random float between 0 & 1
-  req.body.data[0].DT_RowId = Math.trunc(Math.random() * 1000000.0).toString()
+  req.body.data[0].DT_RowId = new Date().getUTCMilliseconds().toString()
   const bucketRow = Object.assign(req.body.data[0], {_owner: req.user._id
   })
 
