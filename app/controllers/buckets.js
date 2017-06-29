@@ -78,7 +78,6 @@ const destroy = (req, res, next) => {
 
 module.exports = controller({
   index,
-  show,
   create,
   update,
   destroy
