@@ -20,13 +20,11 @@ const index = (req, res, next) => {
   //   _owner: 59526e965a568c1c80df150e } ]
   Bucket.find({ _owner: req.user._id })
   .then(bucketRows => {
-    console.log('Database contains: ', bucketRows)
     res.json({data: bucketRows.map((e) =>
         e.toJSON({ user: req.user }))
     })
   })
   .catch(next)
-  console.log('Index: ', req.body)
 }
 
 const create = (req, res, next) => {
@@ -44,17 +42,14 @@ const create = (req, res, next) => {
   // status: 'Some Day',
   // DT_RowId: '764725',
   // _owner: 59526e965a568c1c80df150e }
-  console.log('bucketRow: ', bucketRow)
   Bucket.create(bucketRow)
     .then(bucketRow => {
       res.status(201).json(req.body)
       Bucket.find({ _owner: req.user._id })
       .then(bucketRows => {
-        console.log('Database contains: ', bucketRows)
       })
     })
     .catch(next)
-  console.log('Create: returning ', req.body.data)
 }
 
 const update = (req, res, next) => {
