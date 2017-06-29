@@ -76,6 +76,12 @@ const destroy = (req, res, next) => {
     // .catch(next)
 }
 
+// const destroy = (req, res, next) => {
+//   req.example.remove()
+//     .then(() => res.sendStatus(204))
+//     .catch(next)
+// }
+
 module.exports = controller({
   index,
   create,
