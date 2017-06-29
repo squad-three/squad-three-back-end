@@ -21,7 +21,9 @@ const index = (req, res, next) => {
   Bucket.find({ _owner: req.user._id })
   .then(bucketRows => {
     console.log('Database contains: ', bucketRows)
-    res.json({data: bucketRows})
+    res.json({data: bucketRows.map((e) =>
+        e.toJSON({ user: req.user }))
+    })
   })
   .catch(next)
   console.log('Index: ', req.body)
@@ -65,15 +67,9 @@ const update = (req, res, next) => {
 }
 
 const destroy = (req, res, next) => {
-  // req contains
-  // req.params: { id: '42' },
-  // req.query: { action: 'remove', data: { '42': [Object] } },
-  console.log('Destroy: req.params = ', req.params)
-  console.log('Destory: req.query = ', req.quer)
-  res.sendStatus(204)
-  // req.Bucket.remove()
-  //   .then(() => res.sendStatus(204))
-    // .catch(next)
+  req.bucket.remove()
+    .then(() => res.sendStatus(204))
+    .catch(next)
 }
 
 module.exports = controller({
@@ -82,8 +78,7 @@ module.exports = controller({
   update,
   destroy
 }, { before: [
- { method: setUser, only: ['index', 'show'] },
- { method: authenticate, except: ['index', 'show'] },
- { method: setModel(Bucket), only: ['show'] }
-// { method: setModel(Bucket, { forUser: true }), only: ['update', 'destroy'] }
+ { method: setUser, only: ['index'] },
+ { method: authenticate, except: ['index'] },
+ { method: setModel(Bucket, { forUser: true }), only: ['update', 'destroy'] }
 ] })
