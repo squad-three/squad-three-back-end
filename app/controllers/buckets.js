@@ -18,16 +18,13 @@ const index = (req, res, next) => {
   //   status: 'Some Day',
   //   DT_RowId: '923944',
   //   _owner: 59526e965a568c1c80df150e } ]
-
-  // Bucket.find()
-  //   .then(Buckets => res.json({
-  //     Buckets: Buckets.map((e) =>
-  //       e.toJSON({ virtuals: true, user: req.user }))
-  //   }))
-  //   .catch(next)
-  req.body.data = []
+  Bucket.find({ _owner: req.user._id })
+  .then(bucketRows => {
+    console.log('Database contains: ', bucketRows)
+    res.json({data: bucketRows})
+  })
+  .catch(next)
   console.log('Index: ', req.body)
-  res.status(201).json(req.body)
 }
 
 const show = (req, res) => {
