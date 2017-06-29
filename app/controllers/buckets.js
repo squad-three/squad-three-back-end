@@ -9,15 +9,22 @@ const setUser = require('./concerns/set-current-user')
 const setModel = require('./concerns/set-mongoose-model')
 
 const index = (req, res, next) => {
-  // Bucket.find()
-  //   .then(Buckets => res.json({
-  //     Buckets: Buckets.map((e) =>
-  //       e.toJSON({ virtuals: true, user: req.user }))
-  //   }))
-  //   .catch(next)
-  req.body.data = []
+  // DataTables wants an array with elements that look like this:
+  // [ { description: '1',
+  //   category: 'Achievement',
+  //   location: '1',
+  //   duration: '1',
+  //   cost: '1',
+  //   status: 'Some Day',
+  //   DT_RowId: '923944',
+  //   _owner: 59526e965a568c1c80df150e } ]
+  Bucket.find({ _owner: req.user._id })
+  .then(bucketRows => {
+    console.log('Database contains: ', bucketRows)
+    res.json({data: bucketRows})
+  })
+  .catch(next)
   console.log('Index: ', req.body)
-  res.status(201).json(req.body)
 }
 
 const show = (req, res) => {
@@ -27,19 +34,31 @@ const show = (req, res) => {
 }
 
 const create = (req, res, next) => {
-  // const Bucket = Object.assign(req.body.data, {
-  //   _owner: req.user._id
-  // })
-  // Bucket.create(Bucket)
-  //   .then(Bucket =>
-  //     res.status(201)
-  //       .json({
-  //         Bucket: Bucket.toJSON({ virtuals: true, user: req.user })
-  //       }))
-    // .catch(next)
-  req.body.data[0].DT_RowId = '42'
+  // Math.random returns a random float between 0 & 1
+  req.body.data[0].DT_RowId = Math.trunc(Math.random() * 1000000.0).toString()
+  const bucketRow = Object.assign(req.body.data[0], {_owner: req.user._id
+  })
+
+  // Mongo wants to see this:
+  // bucketRow:  { description: '5',
+  // category: 'Achievement',
+  // location: '5',
+  // duration: '5',
+  // cost: '5',
+  // status: 'Some Day',
+  // DT_RowId: '764725',
+  // _owner: 59526e965a568c1c80df150e }
+  console.log('bucketRow: ', bucketRow)
+  Bucket.create(bucketRow)
+    .then(bucketRow => {
+      res.status(201).json(req.body)
+      Bucket.find({ _owner: req.user._id })
+      .then(bucketRows => {
+        console.log('Database contains: ', bucketRows)
+      })
+    })
+    .catch(next)
   console.log('Create: returning ', req.body.data)
-  res.status(201).json(req.body)
 }
 
 const update = (req, res, next) => {
