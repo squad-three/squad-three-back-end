@@ -65,22 +65,19 @@ const update = (req, res, next) => {
 }
 
 const destroy = (req, res, next) => {
+  console.log('Got to destroy in buckets.js')
+  console.log('this is req.params.id ', req.params.id)
+  console.log('this is req.params ', req.params)
   // req contains
   // req.params: { id: '42' },
   // req.query: { action: 'remove', data: { '42': [Object] } },
   console.log('Destroy: req.params = ', req.params)
-  console.log('Destory: req.query = ', req.quer)
-  res.sendStatus(204)
-  // req.Bucket.remove()
-  //   .then(() => res.sendStatus(204))
-    // .catch(next)
+  console.log('Destory: req.query = ', req.query)
+  // res.sendStatus(204)
+  req.Bucket.remove()
+    .then(() => res.sendStatus(204))
+    .catch(next)
 }
-
-// const destroy = (req, res, next) => {
-//   req.example.remove()
-//     .then(() => res.sendStatus(204))
-//     .catch(next)
-// }
 
 module.exports = controller({
   index,
