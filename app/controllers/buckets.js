@@ -74,9 +74,14 @@ const destroy = (req, res, next) => {
   console.log('Destroy: req.params = ', req.params)
   console.log('Destory: req.query = ', req.query)
   // res.sendStatus(204)
-  req.Bucket.remove()
-    .then(() => res.sendStatus(204))
-    .catch(next)
+  Bucket.remove({ DT_RowId: req.params.id })
+  .then((x) => {
+    console.log('remove.then x= ', x)
+    res.sendStatus(204)
+  })
+  .catch((error) => {
+    console.log(error)
+  })
 }
 
 module.exports = controller({

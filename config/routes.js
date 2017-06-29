@@ -18,5 +18,5 @@ module.exports = require('lib/wiring/routes')
 
 .get('/bucket', 'buckets#index')
 .post('/bucket', 'buckets#create')
-.delete('/bucket/:req.params.id', 'buckets#destroy')
+.delete('/bucket/:id', 'buckets#destroy')
 .put('/bucket', 'buckets#update')
