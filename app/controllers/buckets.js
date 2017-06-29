@@ -59,6 +59,7 @@ const create = (req, res, next) => {
 
 const update = (req, res, next) => {
   delete req.body._owner  // disallow owner reassignment.
+  req.body.data[req.params.id].DT_RowId = req.params.id
   req.bucket.update(req.body.data[req.params.id])
     .then(() => res.json({data: [req.body.data[req.params.id]]}))
     .catch(next)
