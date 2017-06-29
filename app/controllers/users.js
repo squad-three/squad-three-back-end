@@ -80,7 +80,6 @@ const signin = (req, res, next) => {
 }
 
 const signout = (req, res, next) => {
-  debugger
   getToken().then(token =>
     User.findOneAndUpdate({
       _id: req.params.id,
@@ -94,7 +93,6 @@ const signout = (req, res, next) => {
 }
 
 const changepw = (req, res, next) => {
-  debug('Changing password')
   User.findOne({
     _id: req.params.id,
     token: req.user.token
