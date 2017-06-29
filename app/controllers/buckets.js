@@ -70,12 +70,13 @@ const destroy = (req, res, next) => {
   // req contains
   // req.params: { id: '42' },
   // req.query: { action: 'remove', data: { '42': [Object] } },
-  console.log('Destroy: req.params = ', req.params)
-  console.log('Destory: req.query = ', req.quer)
-  res.sendStatus(204)
-  // req.Bucket.remove()
-  //   .then(() => res.sendStatus(204))
-    // .catch(next)
+  // console.log('Destroy: req.params = ', req.params)
+  // console.log('Destory: req.query = ', req.quer)
+  // res.sendStatus(204)
+  console.log('req.bucket is ', req.bucket)
+  req.bucket.remove()
+    .then(() => res.sendStatus(204))
+    .catch(next)
 }
 
 module.exports = controller({
