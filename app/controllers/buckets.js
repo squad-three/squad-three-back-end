@@ -58,12 +58,10 @@ const create = (req, res, next) => {
 }
 
 const update = (req, res, next) => {
-  // delete req.body._owner  // disallow owner reassignment.
-  // req.Bucket.update(req.body.Bucket)
-  //   .then(() => res.sendStatus(204))
-  //   .catch(next)
-  console.log('Update: received & returning: ', req.body.data)
-  res.status(201).json(req.body)
+  delete req.body._owner  // disallow owner reassignment.
+  req.bucket.update(req.body.data[req.params.id])
+    .then(() => res.json({data: [req.body.data[req.params.id]]}))
+    .catch(next)
 }
 
 const destroy = (req, res, next) => {
