@@ -9,6 +9,16 @@ const setUser = require('./concerns/set-current-user')
 const setModel = require('./concerns/set-mongoose-model')
 
 const index = (req, res, next) => {
+  // DataTables wants an array with elements that look like this:
+  // [ { description: '1',
+  //   category: 'Achievement',
+  //   location: '1',
+  //   duration: '1',
+  //   cost: '1',
+  //   status: 'Some Day',
+  //   DT_RowId: '923944',
+  //   _owner: 59526e965a568c1c80df150e } ]
+
   // Bucket.find()
   //   .then(Buckets => res.json({
   //     Buckets: Buckets.map((e) =>
@@ -29,11 +39,27 @@ const show = (req, res) => {
 const create = (req, res, next) => {
   // Math.random returns a random float between 0 & 1
   req.body.data[0].DT_RowId = Math.trunc(Math.random() * 1000000.0).toString()
-  const bucketRow = Object.assign(req.body.data[0], {
-    _owner: req.user._id
+  const bucketRow = Object.assign(req.body.data[0], {_owner: req.user._id
   })
+
+  // Mongo wants to see this:
+  // bucketRow:  { description: '5',
+  // category: 'Achievement',
+  // location: '5',
+  // duration: '5',
+  // cost: '5',
+  // status: 'Some Day',
+  // DT_RowId: '764725',
+  // _owner: 59526e965a568c1c80df150e }
+  console.log('bucketRow: ', bucketRow)
   Bucket.create(bucketRow)
-    .then(bucketRow => res.status(201).json(req.body))
+    .then(bucketRow => {
+      res.status(201).json(req.body)
+      Bucket.find({ _owner: req.user._id })
+      .then(bucketRows => {
+        console.log('Database contains: ', bucketRows)
+      })
+    })
     .catch(next)
   console.log('Create: returning ', req.body.data)
 }
