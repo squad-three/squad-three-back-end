@@ -27,12 +27,6 @@ const index = (req, res, next) => {
   console.log('Index: ', req.body)
 }
 
-const show = (req, res) => {
-  res.json({
-    Bucket: req.Bucket.toJSON({ virtuals: true, user: req.user })
-  })
-}
-
 const create = (req, res, next) => {
   // Math.random returns a random float between 0 & 1
   req.body.data[0].DT_RowId = Math.trunc(Math.random() * 1000000.0).toString()
