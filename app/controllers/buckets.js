@@ -20,6 +20,26 @@ const index = (req, res, next) => {
   //   _owner: 59526e965a568c1c80df150e } ]
   Bucket.find({ _owner: req.user._id })
   .then(bucketRows => {
+    // Verify each row contains a DT_RowId; if not, create one.
+    // DT_RowId should be a string containing a timestamp.
+    // If multiple rows need timestamps, duplicate values could be created here at processor-speed.
+    // Therefore, grab the current timestamp and decrement it
+    //  if we need a 2nd, 3rd, etc.
+    // No need to store the assigned DT_RowId. If this row is updated,
+    //  the value will be stored then.
+    // If the row is read again before an update, we'll just create
+    //  a new DT_RowId value at that time, which is sufficient to
+    //  keep the client's DataTables happy.
+    let timestamp = Date.now()
+    bucketRows.forEach(row => {
+      if (!row.DT_RowId || row.DT_RowId.length < 13) {
+        console.log('Assigning new DT_RowID to ', row.DT_RowId)
+        // DT_RowId should be a string
+        row.DT_RowId = timestamp.toString()
+        timestamp -= 1
+        console.log('New value: ', row.DT_RowId)
+      }
+    })
     res.json({data: bucketRows.map((e) =>
         e.toJSON({ user: req.user }))
     })
@@ -29,7 +49,8 @@ const index = (req, res, next) => {
 
 const create = (req, res, next) => {
   // Date.now() is integer number of milliseconds since start of UNIX epoch
-  req.body.data[0].DT_RowId = Date.now()
+  // Convert it to a string when assigning it to DT_RowId
+  req.body.data[0].DT_RowId = Date.now().toString()
   const bucketRow = Object.assign(req.body.data[0], {_owner: req.user._id
   })
 
@@ -40,7 +61,7 @@ const create = (req, res, next) => {
   // duration: '5',
   // cost: '5',
   // status: 'Some Day',
-  // DT_RowId: '764725',
+  // DT_RowId: '764725…',
   // _owner: 59526e965a568c1c80df150e }
   Bucket.create(bucketRow)
     .then(bucketRow => {
