@@ -21,6 +21,9 @@ const index = (req, res, next) => {
   Bucket.find({ _owner: req.user._id })
   .then(bucketRows => {
     // Verify each row contains a DT_RowId; if not, create one.
+    // Also replaces short (<13 character) DT_RowIds that were created
+    //   in earlier versions; these have a small chance of being
+    //   duplicates for the same user across different rows.s
     // DT_RowId should be a string containing a timestamp.
     // If multiple rows need timestamps, duplicate values could be created here at processor-speed.
     // Therefore, grab the current timestamp and decrement it
@@ -33,11 +36,9 @@ const index = (req, res, next) => {
     let timestamp = Date.now()
     bucketRows.forEach(row => {
       if (!row.DT_RowId || row.DT_RowId.length < 13) {
-        console.log('Assigning new DT_RowID to ', row.DT_RowId)
         // DT_RowId should be a string
         row.DT_RowId = timestamp.toString()
         timestamp -= 1
-        console.log('New value: ', row.DT_RowId)
       }
     })
     res.json({data: bucketRows.map((e) =>
